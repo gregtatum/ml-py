@@ -1,0 +1,289 @@
+# callgrind format
+version: 1
+creator: pprofile
+event: usphit :microseconds/hit
+events: hits microseconds usphit
+cmd: src/mnist.py
+fl=<frozen zipimport>
+fn=__init__:64
+cfl=<frozen importlib._bootstrap_external>
+cfn=_path_stat:140
+calls=1 140
+76 1 0 0
+fl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/random/_pickle.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load:1022
+calls=1 1022
+1 1 0 0
+fl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/core/multiarray.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_handle_fromlist:1053
+calls=1 1053
+10 1 0 0
+fl=<frozen importlib._bootstrap>
+fn=_find_spec:921
+cfl=<frozen importlib._bootstrap_external>
+cfn=find_spec:1431
+calls=5 1431
+945 5 0 0
+fn=_find_and_load_unlocked:987
+cfl=<frozen importlib._bootstrap>
+cfn=_call_with_frames_removed:233
+calls=1 233
+992 1 0 0
+cfl=<frozen importlib._bootstrap>
+cfn=_find_spec:921
+calls=5 921
+1002 5 0 0
+cfl=<frozen importlib._bootstrap>
+cfn=_load_unlocked:664
+calls=20 664
+1006 20 0 0
+fn=_find_and_load:1022
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load_unlocked:987
+calls=26 987
+1027 26 0 0
+fn=_call_with_frames_removed:233
+cfl=/usr/local/Cellar/python@3.10/3.10.6_1/Frameworks/Python.framework/Versions/3.10/lib/python3.10/pickle.py
+cfn=<module>:1
+calls=1 1
+241 1 0 0
+cfl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/compat/py3k.py
+cfn=<module>:1
+calls=1 1
+241 1 0 0
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load:1022
+calls=12 1022
+241 12 0 0
+cfl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/compat/__init__.py
+cfn=<module>:1
+calls=1 1
+241 1 0 0
+cfl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/core/overrides.py
+cfn=<module>:1
+calls=1 1
+241 1 0 0
+cfl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/core/multiarray.py
+cfn=<module>:1
+calls=1 1
+241 1 0 0
+cfl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/core/__init__.py
+cfn=<module>:1
+calls=2 1
+241 2 0 0
+cfl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/__init__.py
+cfn=<module>:1
+calls=4 1
+241 4 0 0
+cfl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/lib/__init__.py
+cfn=<module>:1
+calls=1 1
+241 1 0 0
+cfl=/usr/local/Cellar/python@3.10/3.10.6_1/Frameworks/Python.framework/Versions/3.10/lib/python3.10/hmac.py
+cfn=<module>:1
+calls=1 1
+241 1 0 0
+cfl=/usr/local/Cellar/python@3.10/3.10.6_1/Frameworks/Python.framework/Versions/3.10/lib/python3.10/secrets.py
+cfn=<module>:1
+calls=1 1
+241 1 0 0
+cfl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/random/_pickle.py
+cfn=<module>:1
+calls=1 1
+241 1 0 0
+cfl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/random/__init__.py
+cfn=<module>:1
+calls=1 1
+241 1 0 0
+cfl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/_typing/__init__.py
+cfn=<module>:1
+calls=1 1
+241 1 0 0
+cfl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/typing/__init__.py
+cfn=<module>:1
+calls=1 1
+241 1 0 0
+fn=_load_unlocked:664
+cfl=<frozen importlib._bootstrap_external>
+cfn=exec_module:877
+calls=18 877
+688 18 0 0
+cfl=<frozen importlib._bootstrap_external>
+cfn=exec_module:1182
+calls=2 1182
+688 2 0 0
+fn=_handle_fromlist:1053
+cfl=<frozen importlib._bootstrap>
+cfn=_call_with_frames_removed:233
+calls=9 233
+1078 9 0 0
+fl=/usr/local/Cellar/python@3.10/3.10.6_1/Frameworks/Python.framework/Versions/3.10/lib/python3.10/hmac.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load:1022
+calls=1 1022
+17 1 0 0
+fl=/usr/local/Cellar/python@3.10/3.10.6_1/Frameworks/Python.framework/Versions/3.10/lib/python3.10/secrets.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load:1022
+calls=1 1022
+18 1 0 0
+fl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/random/__init__.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_handle_fromlist:1053
+calls=1 1053
+180 1 0 0
+fl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/compat/__init__.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_handle_fromlist:1053
+calls=1 1053
+13 1 0 0
+fl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/typing/__init__.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load:1022
+calls=1 1022
+158 1 0 0
+fl=<frozen importlib._bootstrap_external>
+fn=_path_stat:140
+147 5 0 0
+fn=find_spec:1536
+cfl=<frozen importlib._bootstrap_external>
+cfn=_path_stat:140
+calls=4 140
+1544 4 0 0
+fn=_get_spec:1399
+cfl=<frozen importlib._bootstrap_external>
+cfn=_path_importer_cache:1356
+calls=1 1356
+1408 1 0 0
+cfl=<frozen importlib._bootstrap_external>
+cfn=find_spec:1536
+calls=4 1536
+1411 4 0 0
+fn=find_spec:1431
+cfl=<frozen importlib._bootstrap_external>
+cfn=_get_spec:1399
+calls=5 1399
+1439 5 0 0
+fn=exec_module:877
+cfl=<frozen importlib._bootstrap>
+cfn=_call_with_frames_removed:233
+calls=18 233
+883 18 0 0
+fn=exec_module:1182
+cfl=<frozen importlib._bootstrap>
+cfn=_call_with_frames_removed:233
+calls=2 233
+1184 2 0 0
+fn=_path_hooks:1343
+cfl=<frozen zipimport>
+cfn=__init__:64
+calls=1 64
+1350 1 0 0
+fn=_path_importer_cache:1356
+cfl=<frozen importlib._bootstrap_external>
+cfn=_path_hooks:1343
+calls=1 1343
+1374 1 0 0
+fl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/compat/py3k.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load:1022
+calls=1 1022
+26 1 0 0
+fl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/core/__init__.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_handle_fromlist:1053
+calls=1 1053
+23 1 0 0
+cfl=<frozen importlib._bootstrap>
+cfn=_handle_fromlist:1053
+calls=1 1053
+100 1 0 0
+fl=/usr/local/Cellar/python@3.10/3.10.6_1/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py
+fn=wait:288
+320 1 0 0
+fn=wait:589
+cfl=/usr/local/Cellar/python@3.10/3.10.6_1/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py
+cfn=wait:288
+calls=1 288
+607 1 0 0
+fn=start:916
+cfl=/usr/local/Cellar/python@3.10/3.10.6_1/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py
+cfn=wait:589
+calls=1 589
+940 1 0 0
+fl=src/mnist.py
+fn=read_in_images:20
+41 1 0 0
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load:1022
+calls=4 1022
+2 4 0 0
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load:1022
+calls=1 1022
+3 1 0 0
+cfl=src/mnist.py
+cfn=load_in_test_images:120
+calls=1 120
+132 1 0 0
+fn=load_in_test_images:120
+cfl=src/mnist.py
+cfn=read_in_images:20
+calls=1 20
+123 1 0 0
+fl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/core/overrides.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load:1022
+calls=1 1022
+8 1 0 0
+fl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/bin/pprofile
+fn=<module>:1
+cfl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/pprofile/__init__.py
+cfn=main:1343
+calls=7 1343
+8 7 0 0
+fl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/_typing/__init__.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load:1022
+calls=1 1022
+92 1 0 0
+fl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/lib/__init__.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load:1022
+calls=1 1022
+36 1 0 0
+fl=/Users/greg/Library/Caches/pypoetry/virtualenvs/spec-py-p6sDvySV-py3.10/lib/python3.10/site-packages/numpy/__init__.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_handle_fromlist:1053
+calls=2 1053
+140 2 0 0
+cfl=<frozen importlib._bootstrap>
+cfn=_handle_fromlist:1053
+calls=1 1053
+143 1 0 0
+cfl=<frozen importlib._bootstrap>
+cfn=_handle_fromlist:1053
+calls=1 1053
+151 1 0 0
+fl=/usr/local/Cellar/python@3.10/3.10.6_1/Frameworks/Python.framework/Versions/3.10/lib/python3.10/pickle.py
+fn=<module>:1
+cfl=<frozen importlib._bootstrap>
+cfn=_find_and_load:1022
+calls=1 1022
+37 1 0 0

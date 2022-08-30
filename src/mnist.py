@@ -38,12 +38,14 @@ def read_in_images(path: str, labels: list[int]) -> ImageData:
         print("number_of_cols", number_of_cols)
         print("bytes_per_image", bytes_per_image)
 
-        images: NDf32 = np.empty(
-            (number_of_images, bytes_per_image), dtype=np.float32)
-        for i in range(number_of_images):
-            image: NDf32 = images[i]
-            for j in range(bytes_per_image):
-                image[j] = int.from_bytes(file.read(1), "big") / 255.0
+        data = np.fromfile(
+            file,
+            dtype=np.dtype(((np.ubyte, bytes_per_image), number_of_images)),
+            count=bytes_per_image
+        )
+
+        images = data[0].astype(np.float32) / 255.0
+
         return ImageData(
             images=images,
             labels=labels,
@@ -96,7 +98,7 @@ def output_image(image_data: ImageData, index: int) -> None:
     for i in range(height):
         for j in range(width):
             index = i * height + j
-            if image[index] > 50.0 / 255.0:
+            if image[index] > 0.5:
                 string += "X"
             else:
                 string += "."
@@ -124,6 +126,6 @@ test_images = load_in_test_images()
 for i in range(10):
     output_image(test_images, i)
 
-# training_images = load_in_training_images()
+training_images = load_in_training_images()
 
 print("Completed mnist script")

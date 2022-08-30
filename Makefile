@@ -1,4 +1,5 @@
 .PHONY: install, lint-format, lint-style, test-py, test-types, test, lint, all, mnist
+.PHONY: mnist-profile
 
 install:
 	poetry install
@@ -23,3 +24,10 @@ all: lint test
 
 mnist:
 	python src/mnist.py
+
+mnist-profile:
+	poetry run pprofile \
+		--statistic .01 \
+		--format callgrind \
+		--out mnist.callgrind \
+		src/mnist.py

@@ -155,6 +155,14 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
+name = "pprofile"
+version = "2.1.0"
+description = "Line-granularity, thread-aware deterministic and statistic pure-python profiler"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "py"
 version = "1.11.0"
 description = "library with cross-python path, ini-parsing, io, code, log facilities"
@@ -221,7 +229,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "f41fc6e67aac8ff518007a5a279685fefc1e930fb1ba1f0ca4e4c52d719719d5"
+content-hash = "f8a7dfb5d1aa76327a1536e654afd0ae97d9cfd7296d4c0c28993b755fb449be"
 
 [metadata.files]
 atomicwrites = [
@@ -345,6 +353,9 @@ platformdirs = [
 pluggy = [
     {file = "pluggy-1.0.0-py2.py3-none-any.whl", hash = "sha256:74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3"},
     {file = "pluggy-1.0.0.tar.gz", hash = "sha256:4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159"},
+]
+pprofile = [
+    {file = "pprofile-2.1.0.tar.gz", hash = "sha256:b2bb56603dadf40c0bc0f61621f22c20e41638425f729945d9b7f8e4ae8cdd4a"},
 ]
 py = [
     {file = "py-1.11.0-py2.py3-none-any.whl", hash = "sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378"},
