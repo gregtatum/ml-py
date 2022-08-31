@@ -5,9 +5,9 @@ description = ""
 authors = []
 
 [tool.poetry.dependencies]
-python = "^3.9"
-np = "^1.0.2"
+python = "3.9"
 numpy = "^1.23.2"
+tensorflow = "^2.9.1"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"
@@ -26,3 +26,5 @@ show_error_codes = true
 # In TypeScript I've found having inferred return types to be quite nice. I would
 # prefer requiring arguments, and making return types optional.
 disallow_untyped_defs = false
+# Tensorflow has no types
+ignore_missing_imports = true

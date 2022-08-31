@@ -1,4 +1,6 @@
 import numpy as np
+from tensorflow import keras
+from keras.utils import to_categorical
 
 
 def test_basics():
@@ -22,3 +24,16 @@ def test_numpy_cast():
     a_converted = a.astype(np.float32) / 256.0
     a_expected = np.array([[0.125, 0.5], [0.0625, 1.0]])
     assert np.array_equal(a_converted, a_expected)
+
+
+def test_one_hot_encoding():
+    """Converts an array of values into one hot encoding.
+    https://www.youtube.com/watch?v=v_4KWmkwmsU
+    """
+    actual = to_categorical([0, 1, 2], 3)
+    expected = np.array([
+        [1.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0],
+        [0.0, 0.0, 1.0],
+    ])
+    assert np.array_equal(actual, expected)

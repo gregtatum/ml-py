@@ -11,7 +11,7 @@ lint-style:
 	poetry run pycodestyle tests --show-source
 
 test-py:
-	poetry run pytest
+	poetry run python -W ignore::DeprecationWarning -m pytest -v
 
 test-types:
 	poetry run mypy tests

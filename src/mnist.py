@@ -1,23 +1,31 @@
 from dataclasses import dataclass
 import numpy as np
-import numpy.typing as npt
-from typing import Any
-# import tensorflow as tf
-# from tensorflow import keras
+from numpy.typing import NDArray
+import tensorflow as tf
 
-NDf32 = npt.NDArray[np.float32]
+from typing import Any
+from tensorflow import keras
+
+# feed forward layers
+from tensorflow.keras.models import Sequential  # type: ignore
+# fully connected layers
+from tensorflow.keras.layers import Dense  # type: ignore
+# stochastic gradient descent
+from tensorflow.keras.optimizers import SGD  # type: ignore
+
+from keras.utils import to_categorical
 
 
 @dataclass
 class ImageData:
-    labels: list[int]
-    images: NDf32
+    labels: NDArray[Any]
+    images: NDArray[Any]
     number_of_rows: int
     number_of_cols: int
     bytes_per_image: int
 
 
-def read_in_images(path: str, labels: list[int]) -> ImageData:
+def read_in_images(path: str, labels: NDArray[Any]) -> ImageData:
     print("Reading in images from: ", path)
     with open(path, "rb") as file:
         def read_i32() -> int:
@@ -32,11 +40,11 @@ def read_in_images(path: str, labels: list[int]) -> ImageData:
         if magic_number != 2051:
             raise Exception("Attempting to load a file that is not an mnist file.", path)
 
-        print("magic_number", magic_number)
-        print("number_of_images", number_of_images)
-        print("number_of_rows", number_of_rows)
-        print("number_of_cols", number_of_cols)
-        print("bytes_per_image", bytes_per_image)
+        print(" > magic_number", magic_number)
+        print(" > number_of_images", number_of_images)
+        print(" > number_of_rows", number_of_rows)
+        print(" > number_of_cols", number_of_cols)
+        print(" > bytes_per_image", bytes_per_image)
 
         data = np.fromfile(
             file,
@@ -44,10 +52,8 @@ def read_in_images(path: str, labels: list[int]) -> ImageData:
             count=bytes_per_image
         )
 
-        images = data[0].astype(np.float32) / 255.0
-
         return ImageData(
-            images=images,
+            images=data[0],
             labels=labels,
             number_of_rows=number_of_rows,
             number_of_cols=number_of_cols,
@@ -55,7 +61,7 @@ def read_in_images(path: str, labels: list[int]) -> ImageData:
         )
 
 
-def read_in_labels(path: str) -> list[int]:
+def read_in_labels(path: str) -> NDArray[Any]:
     """
     According to: http://yann.lecun.com/exdb/mnist/
 
@@ -74,17 +80,22 @@ def read_in_labels(path: str) -> list[int]:
             return int.from_bytes(file.read(4), "big")
 
         magic_number = read_i32()
-        number_of_items = read_i32()
+        count = read_i32()
 
         if magic_number != 2049:
             raise Exception(
                 "Attempting to load a file that is not an mnist label file.", path)
 
-        labels = []
-        for i in range(number_of_items):
-            labels.append(int.from_bytes(file.read(1), "big"))
+        data = np.fromfile(
+            file,
+            dtype=np.ubyte,
+            count=count
+        )
+        results = np.zeros((count, 10), np.float32)
+        for n in range(count):
+            results[n][data[n]] = 1.0
 
-        return labels
+        return results
 
 
 def output_image(image_data: ImageData, index: int) -> None:
@@ -105,7 +116,7 @@ def output_image(image_data: ImageData, index: int) -> None:
         string += "\n"
 
     print(string)
-    print("\n^ This image is labeled \"{}\"\n".format(label))
+    print("\n^ This image is labeled \"{}\"\n".format(list(label).index(1.0)))
 
     string
 
@@ -122,10 +133,74 @@ def load_in_training_images() -> ImageData:
     return read_in_images("./data/train-images-idx3-ubyte", labels)
 
 
-test_images = load_in_test_images()
-for i in range(10):
-    output_image(test_images, i)
+def build_layers(train_data: ImageData, test_data: ImageData) -> None:
+    print("Creating the model")
+    # Create the feed forward network.
+    model = Sequential()
 
-training_images = load_in_training_images()
+    # Create two "hidden" layers
+    model.add(Dense(256, input_shape=(784,), activation="sigmoid"))
+    model.add(Dense(128, activation="sigmoid"))
+
+    # Softmax normalizes the output. The output layer can include negative numbers or
+    # positive numbers. These values are applied to e^x which converts them into only
+    # positive values along a distribution. Finally, each vector component is divided
+    # by the sum of the total e^x values for each component. This means the resulting
+    # vector components will sum to be 1, and each component will be in the range 0-1.
+    #
+    # See https://en.wikipedia.org/wiki/Softmax_function
+    model.add(Dense(10, activation="softmax"))
+
+    # Define the optimizer.
+    gradient_descent = SGD(learning_rate=0.01)
+
+    print("Compiling the model")
+    # https://keras.io/api/models/model_training_apis/
+    model.compile(
+        # https://www.tensorflow.org/api_docs/python/tf/keras/metrics/categorical_crossentropy
+        loss="categorical_crossentropy",
+        # https://www.tensorflow.org/api_docs/python/tf/keras/optimizers
+        optimizer=gradient_descent,
+        #
+        metrics=["accuracy"]
+    )
+
+    print("Training.")
+    model_result = model.fit(
+        x=train_data.images,
+        y=train_data.labels,
+        validation_data=(test_data.images, test_data.labels),
+        epochs=100,
+        batch_size=128
+    )
+    print(model_result.history)
+
+    count = 10
+    predict_images = test_data.images[:count]
+    predict_labels = test_data.labels[:count]
+    predictions = model.predict(predict_images)
+
+    for i in range(count):
+        prediction = predictions[i]
+        label = test_data.labels[i]
+        output_image(test_data, i)
+
+        minimum = -1.0
+        number = 0
+        for j in range(10):
+            if prediction[j] > minimum:
+                minimum = prediction[j]
+                number = j
+            print(" {}: {}".format(j, prediction[j]))
+
+        print()
+        print("\nPrediction:", number)
+        print()
+
+
+train_data = load_in_test_images()
+test_data = load_in_training_images()
+
+build_layers(train_data, test_data)
 
 print("Completed mnist script")
