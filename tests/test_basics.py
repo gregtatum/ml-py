@@ -1,6 +1,8 @@
 import numpy as np
 from tensorflow import keras
 from keras.utils import to_categorical
+from numpy.typing import NDArray
+from typing import Any
 
 
 def test_basics():
@@ -37,3 +39,21 @@ def test_one_hot_encoding():
         [0.0, 0.0, 1.0],
     ])
     assert np.array_equal(actual, expected)
+
+
+def test_numpy_types():
+    any_array = np.array([0, 1, 2, 3])  # This is an NDArray[Any]
+    _any_array_1: NDArray[Any] = any_array  # The actual type
+    _any_array_2: NDArray[np.uint] = any_array  # Demonstration that this is an Any.
+    _any_array_3: NDArray[np.float64] = any_array  # Demonstration that this is an Any.
+    assert any_array.dtype == np.dtype(
+        'int64'), "The actual type is an int64, even though it's marked as an Any"
+
+    uint_array = np.array([0, 1, 2, 3], np.uint)
+    assert uint_array.dtype == np.dtype('uint')
+    _uint_arr_actual_type: NDArray[np.uint] = uint_array
+    _uint_arr_expect_err: NDArray[np.int32] = uint_array  # type: ignore
+
+    nested_array = np.array([[0, 1], [2, 3], [4, 5]], np.uint)
+    assert nested_array.dtype == np.dtype('uint')
+    assert nested_array.shape == (3, 2)

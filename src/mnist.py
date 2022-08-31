@@ -1,5 +1,8 @@
+#!/usr/bin/env python3
+
 from dataclasses import dataclass
 import numpy as np
+from pathlib import Path
 from numpy.typing import NDArray
 import tensorflow as tf
 
@@ -13,19 +16,22 @@ from tensorflow.keras.layers import Dense  # type: ignore
 # stochastic gradient descent
 from tensorflow.keras.optimizers import SGD  # type: ignore
 
-from keras.utils import to_categorical
-
 
 @dataclass
 class ImageData:
-    labels: NDArray[Any]
-    images: NDArray[Any]
+    labels: NDArray[np.float32]
+    images: NDArray[np.float32]
     number_of_rows: int
     number_of_cols: int
     bytes_per_image: int
 
 
-def read_in_images(path: str, labels: NDArray[Any]) -> ImageData:
+root_dir = (Path(__file__).parent / "..").resolve()
+model_dir = root_dir / "data/mnist-model"
+log_dir = root_dir / "data/mnist-model/logs"
+
+
+def read_in_images(path: str, labels: NDArray[np.float32]) -> ImageData:
     print("Reading in images from: ", path)
     with open(path, "rb") as file:
         def read_i32() -> int:
@@ -61,7 +67,7 @@ def read_in_images(path: str, labels: NDArray[Any]) -> ImageData:
         )
 
 
-def read_in_labels(path: str) -> NDArray[Any]:
+def read_in_labels(path: str) -> NDArray[np.float32]:
     """
     According to: http://yann.lecun.com/exdb/mnist/
 
@@ -133,8 +139,15 @@ def load_in_training_images() -> ImageData:
     return read_in_images("./data/train-images-idx3-ubyte", labels)
 
 
-def build_layers(train_data: ImageData, test_data: ImageData) -> None:
-    print("Creating the model")
+def build_model(train_data: ImageData, test_data: ImageData) -> Any:
+    if model_dir.exists():
+        print("Model found at {}".format(model_dir))
+        model = keras.models.load_model(model_dir)
+        print("To re-build, run")
+        print("  rm -rf {}".format(model_dir))
+        return model
+
+    print("No model found, creating a new one")
     # Create the feed forward network.
     model = Sequential()
 
@@ -165,24 +178,32 @@ def build_layers(train_data: ImageData, test_data: ImageData) -> None:
         metrics=["accuracy"]
     )
 
+    print("Log dir")
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(
+        log_dir=log_dir, histogram_freq=1)
+
     print("Training.")
     model_result = model.fit(
         x=train_data.images,
         y=train_data.labels,
         validation_data=(test_data.images, test_data.labels),
         epochs=100,
-        batch_size=128
+        batch_size=128,
+        callbacks=[tensorboard_callback]
     )
-    print(model_result.history)
+    # print(model_result.history)
 
+    print("Saving the model to: {}".format(model_dir))
+    model.save(model_dir)
+    return model
+
+
+def make_predictions(model: Any, image_data: ImageData) -> None:
     count = 10
-    predict_images = test_data.images[:count]
-    predict_labels = test_data.labels[:count]
-    predictions = model.predict(predict_images)
+    predictions = model.predict(image_data.images[:count])
 
     for i in range(count):
         prediction = predictions[i]
-        label = test_data.labels[i]
         output_image(test_data, i)
 
         minimum = -1.0
@@ -191,7 +212,7 @@ def build_layers(train_data: ImageData, test_data: ImageData) -> None:
             if prediction[j] > minimum:
                 minimum = prediction[j]
                 number = j
-            print(" {}: {}".format(j, prediction[j]))
+            print(" {}: {}".format(j, "{0:.3f}".format(prediction[j])))
 
         print()
         print("\nPrediction:", number)
@@ -200,7 +221,7 @@ def build_layers(train_data: ImageData, test_data: ImageData) -> None:
 
 train_data = load_in_test_images()
 test_data = load_in_training_images()
-
-build_layers(train_data, test_data)
+model = build_model(train_data, test_data)
+make_predictions(model, test_data)
 
 print("Completed mnist script")
