@@ -5,6 +5,7 @@ import numpy as np
 from pathlib import Path
 from numpy.typing import NDArray
 import tensorflow as tf
+import tensorflowjs as tfjs
 
 from typing import Any
 from tensorflow import keras
@@ -187,14 +188,16 @@ def build_model(train_data: ImageData, test_data: ImageData) -> Any:
         x=train_data.images,
         y=train_data.labels,
         validation_data=(test_data.images, test_data.labels),
-        epochs=100,
-        batch_size=128,
+        epochs=50,
         callbacks=[tensorboard_callback]
     )
     # print(model_result.history)
 
     print("Saving the model to: {}".format(model_dir))
     model.save(model_dir)
+    print("Outputing tensorflowjs model as well")
+    tfjs.converters.save_keras_model(model, model_dir)
+
     return model
 
 
@@ -219,9 +222,14 @@ def make_predictions(model: Any, image_data: ImageData) -> None:
         print()
 
 
-train_data = load_in_test_images()
-test_data = load_in_training_images()
+train_data = load_in_training_images()
+test_data = load_in_test_images()
+
+print("Test data count: {}".format(len(train_data.images)))
+print("Train data count: {}".format(len(test_data.images)))
+
 model = build_model(train_data, test_data)
+model.summary()
 make_predictions(model, test_data)
 
 print("Completed mnist script")
