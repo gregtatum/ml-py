@@ -12,8 +12,8 @@ from tensorflow import keras
 from tensorflow.keras import datasets, utils, layers  # type: ignore
 
 root_dir = (Path(__file__).parent / "..").resolve()
-model_dir = root_dir / "data/mnist-model"
-log_dir = root_dir / "data/mnist-model/logs"
+model_dir = root_dir / "data/mnist-cnn"
+log_dir = root_dir / "data/mnist-cnn/logs"
 
 # trainX shape: (60000, 28, 28)
 # trainY shape: (60000,)
@@ -71,9 +71,12 @@ def build_model() -> Any:
     # Create the feed forward network.
     model = keras.Sequential([
         keras.Input(shape=(28, 28, 1)),
+        layers.Conv2D(32, kernel_size=(3, 3), activation="relu"),
+        layers.MaxPooling2D(pool_size=(2, 2)),
+        layers.Conv2D(64, kernel_size=(3, 3), activation="relu"),
+        layers.MaxPooling2D(pool_size=(2, 2)),
         layers.Flatten(),
-        layers.Dense(256, activation="sigmoid"),
-        layers.Dense(128, activation="sigmoid"),
+        layers.Dropout(0.5),
         layers.Dense(10, activation="softmax"),
     ])
 
@@ -86,14 +89,15 @@ def build_model() -> Any:
 
     print("Training.")
 
-    model.fit(
+    model_result = model.fit(
         x=x_train,
         y=y_train,
         validation_data=(x_test, y_test),
         batch_size=128,
-        epochs=50,
+        epochs=5,
         callbacks=[tensorboard_callback]
     )
+    # print(model_result.history)
 
     print("Saving the model to: {}".format(model_dir))
     model.save(model_dir)

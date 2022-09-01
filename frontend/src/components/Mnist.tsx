@@ -3,6 +3,7 @@ import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-backend-wasm';
 
 import './Mnist.css';
+import { ensureExists } from 'src/utils';
 const MNIST_WIDTH_PX = 28;
 
 interface ModelResult {
@@ -15,9 +16,11 @@ let generation = 0;
 
 export function Mnist() {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const selectRef = React.useRef<HTMLSelectElement>(null);
   const ctxRef = React.useRef<CanvasRenderingContext2D | null>(null);
   const [curve, onCurveDrawn] = React.useState<Curve | null>(null);
   const [model, setModel] = React.useState<tf.LayersModel | null>(null);
+  const [modelPath, setModelPath] = React.useState<string | null>(null);
   const [modelResults, setModelResults] = React.useState<ModelResult[] | null>(
     null,
   );
@@ -28,18 +31,24 @@ export function Mnist() {
       return;
     }
     ctxRef.current = drawingTarget.getContext('2d');
+    changeModel();
     setupCurveDrawing({
       drawingTarget,
       onCurveDrawn,
       pointsPerDistance: 5,
     });
-
-    tf.setBackend('wasm').then(() => {
-      tf.loadLayersModel('mnist-model/model.json').then((model) => {
-        setModel(model);
-      });
-    });
   }, []);
+
+  React.useEffect(() => {
+    if (modelPath) {
+      tf.setBackend('wasm').then(() => {
+        tf.loadLayersModel(modelPath).then((model) => {
+          console.log('Setting model', model);
+          setModel(model);
+        });
+      });
+    }
+  }, [modelPath]);
 
   React.useEffect(() => {
     const ctx = ctxRef.current;
@@ -56,7 +65,6 @@ export function Mnist() {
       const pixel = data[i];
       tensorData[i / 4] = 1 - pixel / 255;
     }
-    console.log(`!!! data`, { data, tensorData });
 
     // Draw the ascii art out to the screen
     let string = '';
@@ -74,7 +82,7 @@ export function Mnist() {
     console.log(string);
 
     const result = model.predict(
-      tf.tensor(tensorData).reshape([-1, 784]),
+      tf.tensor(tensorData).reshape([-1, 28, 28, 1]),
     ) as tf.Tensor;
 
     result.array().then((results: any) => {
@@ -91,11 +99,19 @@ export function Mnist() {
     });
   }, [curve]);
 
-  console.log(modelResults);
+  function changeModel() {
+    setModelPath(ensureExists(selectRef.current).value);
+  }
 
   const nf = new Intl.NumberFormat('en-US');
   return (
     <div className="mnist">
+      <select onChange={changeModel} ref={selectRef}>
+        <option value="mnist-model/model.json">Basic Feed Forward</option>
+        <option value="mnist-cnn/model.json">
+          Convolutional Neural Network
+        </option>
+      </select>
       <canvas
         className="mnistCanvas"
         width={MNIST_WIDTH_PX}

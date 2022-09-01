@@ -27,3 +27,9 @@ mnist:
 
 mnist-logs:
 	poetry run tensorboard --logdir data/mnist-model/logs/
+
+mnist-cnn:
+	poetry run python src/mnist-cnn.py
+
+mnist-cnn-logs:
+	poetry run tensorboard --logdir data/mnist-cnn/logs/

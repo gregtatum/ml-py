@@ -69,7 +69,6 @@ module.exports = {
     // See https://github.com/yannickcr/eslint-plugin-react/issues/1561
     // 'react/no-unused-prop-types': 'error',
     'react/no-unused-state': 'error',
-    'react/jsx-no-bind': 'error',
     // False positives.
     'react/jsx-key': 'off',
 

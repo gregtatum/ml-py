@@ -1,10 +1,16 @@
 .mnist {
   position: relative;
   min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-width: 300px;
 }
 
 .mnistCanvas {
   outline: 1px solid #000;
+  width: 28px;
+  height: 28px;
 }
 
 .mnistResultsNumber {

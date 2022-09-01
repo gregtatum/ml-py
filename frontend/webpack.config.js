@@ -52,6 +52,7 @@ const config = {
       patterns: [
         { from: 'data' },
         { from: '../data/mnist-model', to: 'mnist-model' },
+        { from: '../data/mnist-cnn', to: 'mnist-cnn' },
       ],
     }),
   ],
