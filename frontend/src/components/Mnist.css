@@ -1,0 +1,22 @@
+.mnist {
+  position: relative;
+  min-height: 500px;
+}
+
+.mnistCanvas {
+  outline: 1px solid #000;
+}
+
+.mnistResultsNumber {
+  display: inline-flex;
+  padding: 4px;
+  border: 1px solid #111;
+  margin: 1px 6px 1px 0;
+  border-radius: 2px;
+  background: #eee;
+  line-height: 0.8;
+}
+
+.mnistResultsRank {
+  color: #555;
+}

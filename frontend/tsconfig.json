@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "jsx": "react",
+    "module": "commonjs", // Resolution strategy.
+    "strict": true,
+    "baseUrl": "./",
+    "noEmit": true,
+    "allowJs": true, // Just add "// @ts-check"
+    "checkJs": true,
+    "lib": ["esnext", "dom"],
+    // paths lets you declare how TypeScript should resolve an import in
+    // your require/imports.
+    "paths": {
+      "src/*": [
+        "./src/*",
+        "src/@types/globals.d.ts",
+      ],
+    },
+    // Required for tensorflow
+    "skipLibCheck": true
+  },
+  // Specifies an array of filenames or patterns to include in the program. These
+  // filenames are resolved relative to the directory containing the tsconfig.json file.
+  "include": ["src/**/*"],
+  // Specifies an array of filenames or patterns that should be skipped when
+  // resolving include.
+  "exclude": [],
+}
