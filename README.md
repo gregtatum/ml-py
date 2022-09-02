@@ -1,11 +1,3 @@
-# spec-py
+# Machine Learning in Python
 
-A collection of tests to help me remember how the python language works.
-
-## Running things
-
-I opted for a makefile to run things, inspect the `Makefile` for all of the commands, like:
-
-```
-make test
-```
+This project collects my learnings on doing machine learning in python. See the Makefile for how to run, e.g. `make test`.
