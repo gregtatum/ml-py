@@ -12,8 +12,8 @@ from tensorflow import keras
 from tensorflow.keras import datasets, utils, layers  # type: ignore
 
 root_dir = (Path(__file__).parent / "..").resolve()
-model_dir = root_dir / "data/mnist-model"
-log_dir = root_dir / "data/mnist-model/logs"
+model_dir = root_dir / "models/mnist-model"
+log_dir = root_dir / "models/mnist-model/logs"
 
 # trainX shape: (60000, 28, 28)
 # trainY shape: (60000,)

@@ -149,10 +149,12 @@ export function Mnist() {
         data set.
       </p>
       <select onChange={changeModel} ref={selectRef}>
-        <option value="mnist-cnn/model.json">
+        <option value="models/mnist-cnn/model.json">
           Convolutional Neural Network
         </option>
-        <option value="mnist-model/model.json">Basic Feed Forward</option>
+        <option value="models/mnist-model/model.json">
+          Basic Feed Forward
+        </option>
       </select>
       <canvas
         className="mnistCanvas"
