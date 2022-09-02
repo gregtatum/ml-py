@@ -1,10 +1,8 @@
-# To set up the deploy to github pages, first run:
-# ----------
-# cd dist
-# git init -b gh-pages
-# git remote add origin git@github.com:gregtatum/REPO.git
-
-cd dist                            \
- && git add .                      \
- && git commit -m "Deploy $(date)" \
- && git push
+set -x
+cd dist
+git init
+git remote add origin git@github.com:gregtatum/ml-py.git
+git checkout -b gh-pages
+git add .
+git commit -m 'Deploy'
+git push origin gh-pages -f

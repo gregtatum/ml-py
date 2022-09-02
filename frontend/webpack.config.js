@@ -25,7 +25,6 @@ const config = {
     path: path.join(__dirname, 'dist'),
     filename: '[fullhash].bundle.js',
     chunkFilename: '[id].[fullhash].bundle.js',
-    publicPath: '/',
   },
   performance: { hints: false },
   module: {
