@@ -7,10 +7,14 @@
   max-width: 300px;
 }
 
+.mnist h1, p {
+  margin: 0;
+}
+
 .mnistCanvas {
   outline: 1px solid #000;
-  width: 28px;
-  height: 28px;
+  max-width: 200px;
+  height: 200px;
 }
 
 .mnistResultsNumber {

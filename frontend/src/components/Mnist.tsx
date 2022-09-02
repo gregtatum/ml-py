@@ -5,6 +5,7 @@ import '@tensorflow/tfjs-backend-wasm';
 import './Mnist.css';
 import { ensureExists } from 'src/utils';
 const MNIST_WIDTH_PX = 28;
+const LINE_WIDTH = 2.5;
 
 interface ModelResult {
   rank: number;
@@ -13,12 +14,11 @@ interface ModelResult {
 }
 
 let generation = 0;
-
 export function Mnist() {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const selectRef = React.useRef<HTMLSelectElement>(null);
   const ctxRef = React.useRef<CanvasRenderingContext2D | null>(null);
-  const [curve, onCurveDrawn] = React.useState<Curve | null>(null);
+  const [curve, setCurve] = React.useState<Curve | null>(null);
   const [model, setModel] = React.useState<tf.LayersModel | null>(null);
   const [modelPath, setModelPath] = React.useState<string | null>(null);
   const [modelResults, setModelResults] = React.useState<ModelResult[] | null>(
@@ -30,11 +30,47 @@ export function Mnist() {
     if (!drawingTarget) {
       return;
     }
-    ctxRef.current = drawingTarget.getContext('2d');
+    const ctx = drawingTarget.getContext('2d');
+    if (!ctx) {
+      return;
+    }
+    ctxRef.current = ctx;
     changeModel();
     setupCurveDrawing({
       drawingTarget,
-      onCurveDrawn,
+      onStartDraw() {
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, MNIST_WIDTH_PX, MNIST_WIDTH_PX);
+      },
+      onCurveDrawn(curve: Curve) {
+        const s =
+          drawingTarget.getBoundingClientRect().width / drawingTarget.width;
+        function scale(points: Vec2[]) {
+          for (const point of points) {
+            point.x /= s;
+            point.y /= s;
+          }
+        }
+        console.log(curve.line[0]);
+        scale(curve.line);
+        scale(curve.cpLeft);
+        scale(curve.cpRight);
+        setCurve(curve);
+        console.log(curve.line[0]);
+      },
+      onPoint(prev: Vec2, curr: Vec2) {
+        const s =
+          drawingTarget.getBoundingClientRect().width / drawingTarget.width;
+
+        ctx.lineWidth = LINE_WIDTH;
+        ctx.strokeStyle = '#000';
+        ctx.lineCap = 'round';
+
+        ctx.beginPath();
+        ctx.moveTo(prev.x / s, prev.y / s);
+        ctx.lineTo(curr.x / s, curr.y / s);
+        ctx.stroke();
+      },
       pointsPerDistance: 5,
     });
   }, []);
@@ -106,11 +142,17 @@ export function Mnist() {
   const nf = new Intl.NumberFormat('en-US');
   return (
     <div className="mnist">
+      <h1>Draw a number</h1>
+      <p>
+        This project is demonstrating the results of trained tensorflow models
+        for recognizing hand written digits. The model was trained on the mnist
+        data set.
+      </p>
       <select onChange={changeModel} ref={selectRef}>
-        <option value="mnist-model/model.json">Basic Feed Forward</option>
         <option value="mnist-cnn/model.json">
           Convolutional Neural Network
         </option>
+        <option value="mnist-model/model.json">Basic Feed Forward</option>
       </select>
       <canvas
         className="mnistCanvas"
@@ -132,7 +174,7 @@ export function Mnist() {
 
 type Vec2<T = number> = { x: T; y: T };
 
-export type Curve = {
+type Curve = {
   line: Vec2[];
   cpLeft: Vec2[];
   cpRight: Vec2[];
@@ -141,6 +183,8 @@ export type Curve = {
 };
 
 type Config = {
+  onPoint: (prev: Vec2, curr: Vec2) => void;
+  onStartDraw: () => void;
   drawingTarget: HTMLElement;
   onCurveDrawn: (curve: Curve) => void;
   pointsPerDistance: number;
@@ -153,7 +197,7 @@ type Current = {
   totalLineDistance: number;
 };
 
-export function setupCurveDrawing(config: Config) {
+function setupCurveDrawing(config: Config) {
   const current: Current = {
     points: [],
     distancePerPoint: [],
@@ -184,6 +228,7 @@ export function setupCurveDrawing(config: Config) {
     event.preventDefault();
 
     if (current.isDrawingCurve === false) {
+      config.onStartDraw();
       drawingTarget.addEventListener('touchend', onTouchEnd);
 
       // Reset the current state
@@ -205,6 +250,7 @@ export function setupCurveDrawing(config: Config) {
     }
 
     if (current.isDrawingCurve === false) {
+      config.onStartDraw();
       drawingTarget.addEventListener('mousemove', onMouseMove);
       drawingTarget.addEventListener('mouseout', onMouseMoveDone);
       drawingTarget.addEventListener('mouseup', onMouseMoveDone);
@@ -284,6 +330,8 @@ function addPoint(
   current.totalLineDistance += distance;
   current.points.push(curr);
   current.distancePerPoint.push(distance);
+
+  config.onPoint(prev, curr);
 }
 
 function smoothLine(config: Config, current: Current): Vec2[] {
@@ -391,25 +439,8 @@ function generateSmoothedBezierCurve(line: Vec2[], smoothness: number) {
   };
 }
 
-export function drawLineSegments(
-  ctx: CanvasRenderingContext2D,
-  line: Vec2[],
-): void {
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.strokeStyle = hslToFillStyle(0, 0, 0, 0.3);
-  for (let i = 1; i < line.length; i++) {
-    const prev = line[i - 1];
-    const curr = line[i];
-
-    ctx.moveTo(prev.x, prev.y);
-    ctx.lineTo(curr.x, curr.y);
-  }
-  ctx.stroke();
-}
-
-export function drawCurve(ctx: CanvasRenderingContext2D, curve: Curve): void {
-  ctx.lineWidth = 2.5;
+function drawCurve(ctx: CanvasRenderingContext2D, curve: Curve): void {
+  ctx.lineWidth = LINE_WIDTH;
   ctx.strokeStyle = '#000';
   ctx.beginPath();
   ctx.lineCap = 'round';
