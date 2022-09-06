@@ -8,8 +8,11 @@ import tensorflow as tf
 import tensorflowjs as tfjs  # type: ignore
 
 from typing import Any, Tuple
-from tensorflow import keras
-from tensorflow.keras import datasets, utils, layers  # type: ignore
+
+# Work around https://github.com/tensorflow/tensorflow/issues/56231
+import keras.api._v2.keras as keras
+
+from keras import datasets, utils, layers
 
 root_dir = (Path(__file__).parent / "..").resolve()
 model_dir = root_dir / "models/mnist-cnn"

@@ -1,5 +1,6 @@
 import numpy as np
-from tensorflow import keras
+import tensorflow as tf
+import keras.api._v2.keras as keras
 from keras.utils import to_categorical
 from numpy.typing import NDArray
 from typing import Any
@@ -57,3 +58,35 @@ def test_numpy_types():
     nested_array = np.array([[0, 1], [2, 3], [4, 5]], np.uint)
     assert nested_array.dtype == np.dtype('uint')
     assert nested_array.shape == (3, 2)
+
+
+def test_layer_gap():
+    x = tf.constant([
+        [[0, 1], [2, 3]],
+        [[4, 5], [6, 7]],
+        [[8, 9], [10, 11]],
+    ])
+    y = tf.keras.layers.GlobalAveragePooling1D()(x)
+    assert np.array_equal(y.numpy(), [
+        [1,  2],  # Average of [0, 1], [2, 3] = (0 + 2) / 2 and (1 + 3) / 2
+        [5,  6],
+        [9, 10]]
+    )
+
+
+def test_layer_embedding():
+    tf.random.set_seed(0)
+    embed = keras.layers.Embedding(4, 5)
+    embedded_results = embed(tf.constant([[1, 2, 3], [2, 3, 1]]))
+    gap_results = tf.keras.layers.GlobalAveragePooling1D()(embedded_results)
+
+    print("embed.embeddings", embed.embeddings)
+    print("embedded_results", embedded_results)
+    print("gap_results", gap_results)
+    assert np.array_equal(
+        gap_results.numpy()[0],
+        gap_results.numpy()[1]
+    ), """
+        The average of the results should be the same, since the embedding vectors
+        contain the same values just out of order.
+    """

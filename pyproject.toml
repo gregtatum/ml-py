@@ -29,3 +29,4 @@ show_error_codes = true
 disallow_untyped_defs = false
 # Tensorflow has no types
 ignore_missing_imports = true
+no_any_return = false

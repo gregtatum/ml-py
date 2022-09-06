@@ -11,7 +11,7 @@ lint-style:
 	poetry run pycodestyle tests --show-source
 
 test-py:
-	poetry run python -W ignore::DeprecationWarning -m pytest -v
+	poetry run python -W ignore::DeprecationWarning -m pytest -v -s
 
 test-types:
 	poetry run mypy tests
@@ -33,3 +33,9 @@ mnist-cnn:
 
 mnist-cnn-logs:
 	poetry run tensorboard --logdir data/mnist-cnn/logs/
+
+sentiment:
+	poetry run python src/sentiment.py
+
+sentiment-logs:
+	poetry run tensorboard --logdir data/sentiment/logs/
