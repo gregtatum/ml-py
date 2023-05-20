@@ -62,7 +62,7 @@ def output_image(images: NDArray[np.float32], labels: NDArray[np.uint], index: i
 RawData = Tuple[NDArray[np.uint], NDArray[np.uint]]
 
 
-def build_model() -> Any:
+def build_model() -> keras.Sequential:
     if model_dir.exists():
         print("Model found at {}".format(model_dir))
         model = keras.models.load_model(model_dir)

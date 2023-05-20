@@ -26,16 +26,16 @@ mnist:
 	poetry run python src/mnist.py
 
 mnist-logs:
-	poetry run tensorboard --logdir data/mnist-model/logs/
+	poetry run tensorboard --logdir models/mnist-model/logs/
 
 mnist-cnn:
 	poetry run python src/mnist-cnn.py
 
 mnist-cnn-logs:
-	poetry run tensorboard --logdir data/mnist-cnn/logs/
+	poetry run tensorboard --logdir models/mnist-cnn/logs/
 
 sentiment:
 	poetry run python src/sentiment.py
 
 sentiment-logs:
-	poetry run tensorboard --logdir data/sentiment/logs/
+	poetry run tensorboard --logdir models/sentiment/logs/
